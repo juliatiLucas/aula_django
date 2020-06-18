@@ -1,4 +1,3 @@
-from usuario.models import Professor, Aluno
 
 
 def aluno(aluno, password=False):
@@ -26,8 +25,8 @@ def aula(aula):
     return {
         "id": aula.id,
         "nome": aula.nome,
-        "professor": professor(aula.professor),
-        "data": aula.data
+        "data": aula.data,
+        "professor": professor(aula.professor)
     }
 
 def aula_aluno(aula_aluno):
@@ -35,4 +34,12 @@ def aula_aluno(aula_aluno):
         "id": aula_aluno.id,
         "aula": aula(aula_aluno.aula),
         "aluno": aluno(aula_aluno.aluno)
+    }
+
+def tarefa(tarefa):
+    return {
+        "id": tarefa.id,
+        "nome": tarefa.nome,
+        "descricao": tarefa.descricao,
+        "aula": aula(tarefa.aula)
     }

@@ -23,3 +23,15 @@ class AulaAluno(models.Model):
 
     def __unicode__(self):
         return self.aula.nome
+
+
+class Tarefa(models.Model):
+    nome = models.CharField(max_length=200, null=False, blank=False)
+    descricao = models.CharField(max_length=560)
+    aula = models.ForeignKey(Aula, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.nome
+
+    def __unicode__(self):
+        return self.nome
