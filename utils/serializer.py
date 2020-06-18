@@ -1,7 +1,7 @@
 from usuario.models import Professor, Aluno
 
 
-def aluno_to_json(aluno, password=False):
+def aluno(aluno, password=False):
     aluno_dict: dict = {
         "id": aluno.id,
         "nome": aluno.nome,
@@ -10,9 +10,9 @@ def aluno_to_json(aluno, password=False):
     if password:
         aluno_dict['senha'] = aluno.senha
     return aluno_dict
+ 
 
-
-def professor_to_json(professor, password=False):
+def professor(professor, password=False):
     professor_dict: dict = {
         "id": professor.id,
         "nome": professor.nome,
@@ -22,10 +22,17 @@ def professor_to_json(professor, password=False):
         professor_dict['senha'] = professor.senha
     return professor_dict
 
-def aula_to_json(aula):
+def aula(aula):
     return {
         "id": aula.id,
         "nome": aula.nome,
-        "professor": professor_to_json(aula.professor),
+        "professor": professor(aula.professor),
         "data": aula.data
+    }
+
+def aula_aluno(aula_aluno):
+    return {
+        "id": aula_aluno.id,
+        "aula": aula(aula_aluno.aula),
+        "aluno": aluno(aula_aluno.aluno)
     }

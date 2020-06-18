@@ -10,7 +10,7 @@ class ProfessorView(views.APIView):
             if (len(verify) == 0):
                 professor = Professor(nome=data['nome'], email=data['email'], senha=data['senha'])
                 professor.save()
-                return response.Response(serializer.professor_to_json(professor), status.HTTP_201_CREATED)
+                return response.Response(serializer.professor(professor), status.HTTP_201_CREATED)
             else: 
                 return response.Response({}, status.HTTP_400_BAD_REQUEST)
         except:
@@ -25,7 +25,7 @@ class AlunoView(views.APIView):
             if (len(verify) == 0):
                 aluno = Aluno(nome=data['nome'], email=data['email'], senha=data['senha'])
                 aluno.save()
-                return response.Response(serializer.aluno_to_json(aluno), status.HTTP_201_CREATED)
+                return response.Response(serializer.aluno(aluno), status.HTTP_201_CREATED)
             else: 
                 return response.Response({}, status.HTTP_400_BAD_REQUEST)
         except:
@@ -41,12 +41,12 @@ class LoginView(views.APIView):
         if data['tipo_usuario'] == 'professor':
             try:
                 professor = Professor.objects.get(email=data['email'], senha=data['senha'])
-                return response.Response(serializer.professor_to_json(professor), status.HTTP_200_OK)
+                return response.Response(serializer.professor(professor), status.HTTP_200_OK)
             except: 
                 return response.Response({}, status.HTTP_400_BAD_REQUEST)
         elif data['tipo_usuario'] == 'aluno':
             try:
                 aluno = Aluno.objects.get(email=data['email'], senha=data['senha'])
-                return response.Response(serializer.aluno_to_json(aluno), status.HTTP_200_OK)
+                return response.Response(serializer.aluno(aluno), status.HTTP_200_OK)
             except: 
                 return response.Response({}, status.HTTP_400_BAD_REQUEST)

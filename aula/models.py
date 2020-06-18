@@ -19,7 +19,7 @@ class AulaAluno(models.Model):
     presente = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.aula.nome + aluno.nome
+        return self.aula.nome
 
     def __unicode__(self):
-        return self.aula.nome + aluno.nome
+        return self.aula.nome
