@@ -16,6 +16,14 @@ class ProfessorView(views.APIView):
         except:
             return response.Response({}, status.HTTP_400_BAD_REQUEST)
 
+    def put(self, request, **kwargs):
+        professor = Professor.objects.filter(pk=self.kwargs['professor'])
+        Professor.objects.filter(pk=self.kwargs['professor']).update(
+            nome=data['nome'] if 'nome' in data else professor.nome,
+            email=data['email'] if 'email' in data else professor.email,
+            senha=data['senha'] if 'senha' in data else professor.senha
+        )
+        return response.Response({}, status.HTTP_200_OK)
 
     def get(self, request, **kwargs):
         professor = Professor.objects.get(pk=self.kwargs['professor'])
@@ -36,6 +44,15 @@ class AlunoView(views.APIView):
         except:
             return response.Response({}, status.HTTP_400_BAD_REQUEST)
     
+    def put(self, request, **kwargs):
+        aluno = Aluno.objects.filter(pk=self.kwargs['aluno'])
+        Aluno.objects.filter(pk=self.kwargs['aluno']).update(
+            nome=data['nome'] if 'nome' in data else aluno.nome,
+            email=data['email'] if 'email' in data else aluno.email,
+            senha=data['senha'] if 'senha' in data else aluno.senha
+        )
+        
+        return response.Response({}, status.HTTP_200_OK)
 
     # def get(self, request, **kwargs):
     def get(self, request, **kwargs):
