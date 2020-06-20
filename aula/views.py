@@ -1,8 +1,8 @@
 from rest_framework import views, response, status
-from .models import Aula, AulaAluno, Tarefa
-from usuario.models import Professor
+from .models import Aula, AulaAluno, Tarefa, Chamada
+from usuario.models import Professor, Aluno
 from utils import serializer
-
+import json
 
 class AulaView(views.APIView):
     def post(self, request, **kwargs):
@@ -57,8 +57,13 @@ class AlunosDaAula(views.APIView):
 class TarefaView(views.APIView):
     def post(self, request, **kwargs):
         data = request.data
-        aula = Aula.objects.get(pk=self.kwargs['aula'])
-        tarefa = Tarefa(aula=aula, descricao=data['descricao'], nome=data['nome'])
+        aula = Aula.objects.get(pk=data['aula'])
+        tarefa = Tarefa(
+            aula=aula,
+            descricao=data['descricao'],
+            nome=data['nome'],
+            prazo=data['prazo'] if 'prazo' in data else None
+            )
         tarefa.save()
         return response.Response(serializer.tarefa(tarefa), status=status.HTTP_201_CREATED)
 
@@ -67,7 +72,8 @@ class TarefaView(views.APIView):
         tarefa = Tarefa.objects.get(pk=self.kwargs['tarefa'])
         Tarefa.objects.filter(pk=self.kwargs['tarefa']).update(
             nome=data['nome'] if 'nome' in data else tarefa.nome,
-            descricao=data['descricao'] if 'descricao' in data else tarefa.descricao
+            descricao=data['descricao'] if 'descricao' in data else tarefa.descricao,
+            prazo=data['prazo'] if 'prazo' in data else tarefa.prazo
         )
         return response.Response(data, status=status.HTTP_200_OK)
 
@@ -76,3 +82,20 @@ class TarefaView(views.APIView):
         tarefas = [serializer.tarefa(tarefa) for tarefa in Tarefa.objects.filter(aula=aula)]
 
         return response.Response(tarefas, status=status.HTTP_200_OK)
+
+    def delete(self, request, **kwargs):
+        Tarefa.objects.filter(pk=self.kwargs['tarefa']).delete()
+        return response.Response({}, status=status.HTTP_200_OK)
+
+
+class ChamadaView(views.APIView):
+    def post(self, request, **kwargs):
+        data = request.data
+        aula = Aula.objects.get(pk=self.kwargs['aula'])
+        alunos = json.loads(data['alunos'])
+        for aluno_id in alunos:
+            aluno = Aluno.objects.get(pk=aluno_id)
+            chamada = Chamada(aula=aula, aluno=aluno)
+            chamada.save()
+
+        return response.Response({}, status=status.HTTP_201_CREATED)

@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path
 from usuario.views import ProfessorView, AlunoView, LoginView
-from aula.views import AulaView, AulaAlunoView, TarefaView, AlunosDaAula
+from aula.views import AulaView, AulaAlunoView, TarefaView, AlunosDaAula, ChamadaView
 from conversa.views import MensagemView
 
 urlpatterns = [
@@ -17,9 +17,11 @@ urlpatterns = [
     path('aulas/', AulaView.as_view()),
     path('aulas/<int:aula>/', AulaView.as_view()),
     path('aulas/<int:aula>/alunos', AlunosDaAula.as_view()),
+    path('aulas/<int:aula>/chamada/', ChamadaView.as_view()),
     path('aulas/<int:aula>/mensagens/', MensagemView.as_view()),
     path('aulas/<int:aula>/mensagens/<int:mensagem>/', MensagemView.as_view()),
+    path('aulas/<int:aula>/tarefas/', TarefaView.as_view()),
     path('tarefas/<int:tarefa>/', TarefaView.as_view()),
-    path('tarefas/<int:aula>/', TarefaView.as_view()),
+    path('tarefas/', TarefaView.as_view()),
     path('presenca/', AulaAlunoView.as_view()),
 ]

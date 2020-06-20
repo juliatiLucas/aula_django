@@ -29,9 +29,21 @@ class Tarefa(models.Model):
     nome = models.CharField(max_length=200, null=False, blank=False)
     descricao = models.CharField(max_length=560)
     aula = models.ForeignKey(Aula, on_delete=models.CASCADE)
+    prazo = models.DateTimeField(auto_now_add=False, blank=True, null=True)
 
     def __str__(self):
         return self.nome
 
     def __unicode__(self):
         return self.nome
+
+class Chamada(models.Model):
+    aula = models.ForeignKey(Aula, on_delete=models.CASCADE)
+    data = models.DateField(auto_now_add=True)
+    aluno = models.ForeignKey(Aluno, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.aula.nome
+
+    def __unicode__(self):
+        return self.aula.nome

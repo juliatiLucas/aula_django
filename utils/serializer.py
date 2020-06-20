@@ -41,6 +41,7 @@ def tarefa(tarefa):
         "id": tarefa.id,
         "nome": tarefa.nome,
         "descricao": tarefa.descricao,
+        "prazo": tarefa.prazo,
         "aula": aula(tarefa.aula)
     }
 
