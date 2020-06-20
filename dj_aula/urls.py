@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path
-from usuario.views import ProfessorView, AlunoView, LoginView
+from usuario.views import ProfessorView, AlunoView, LoginView, BuscarAluno
 from aula.views import AulaView, AulaAlunoView, TarefaView, AlunosDaAula, ChamadaView
 from conversa.views import MensagemView
 
@@ -24,4 +24,5 @@ urlpatterns = [
     path('tarefas/<int:tarefa>/', TarefaView.as_view()),
     path('tarefas/', TarefaView.as_view()),
     path('presenca/', AulaAlunoView.as_view()),
+    path('buscar-aluno/<str:busca>', BuscarAluno.as_view()),
 ]

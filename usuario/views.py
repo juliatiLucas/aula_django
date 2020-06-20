@@ -1,6 +1,7 @@
 from rest_framework import views, response, status
 from .models import Professor, Aluno
 from utils import serializer
+from django.db.models import Q
 
 class ProfessorView(views.APIView):
     def post(self, request, **kwargs):
@@ -74,3 +75,9 @@ class LoginView(views.APIView):
                 return response.Response(serializer.aluno(aluno), status.HTTP_200_OK)
             except: 
                 return response.Response({}, status.HTTP_400_BAD_REQUEST)
+
+
+class BuscarAluno(views.APIView):
+    def get(self, request, **kwargs):
+        alunos = [serializer.aluno(aluno) for aluno in Aluno.objects.filter(Q(nome__istartswith=self.kwargs['busca']) | Q(email__istartswith=self.kwargs['busca']))]
+        return response.Response(alunos, status.HTTP_200_OK)
