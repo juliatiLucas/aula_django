@@ -23,7 +23,7 @@ class MensagemView(views.APIView):
 
     #/aulas/<int:aula>/mensagens
     def get(self, request, **kwargs):
-        aula = Aula.objects.get()
+        aula = Aula.objects.get(pk=self.kwargs['aula'])
         mensagens = [serializer.mensagem(mensagem) for mensagem in Mensagem.objects.filter(aula=aula)]
         return response.Response(mensagens, status.HTTP_200_OK)
 
