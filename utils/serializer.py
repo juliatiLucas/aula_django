@@ -1,4 +1,4 @@
-
+from aula.models import Chamada
 
 def aluno(aluno, password=False):
     aluno_dict: dict = {
@@ -53,4 +53,20 @@ def mensagem(mensagem):
         "aula": aula(mensagem.aula),
         "professor": professor(mensagem.professor) if mensagem.professor else None,
         "aluno": aluno(mensagem.aluno) if mensagem.aluno else None
+    }
+
+
+def data_chamada(data_chamada):
+    return {
+        "id": data_chamada.id,
+        "aula": data_chamada.aula.id,
+        "data": data_chamada.data,
+        "chamadas": [chamada(c) for c in Chamada.objects.filter(data_chamada=data_chamada)]
+    }
+
+def chamada(chamada):
+    return {
+        "id": chamada.id,
+        "aluno": aluno(chamada.aluno),
+        "presente": chamada.presente,
     }

@@ -1,5 +1,5 @@
 from rest_framework import views, response, status
-from .models import Aula, AulaAluno, Tarefa, Chamada
+from .models import Aula, AulaAluno, Tarefa, Chamada, DataChamada
 from usuario.models import Professor, Aluno
 from utils import serializer
 import json
@@ -15,10 +15,7 @@ class AulaView(views.APIView):
     def put(self, request, **kwargs):
         data = request.data
         aula = Aula.objects.get(pk=self.kwargs['aula'])
-        Aula.objects.filter(pk=self.kwargs['aula']).update(
-            nome=data['nome'] if 'nome' in data else aula.nome,
-            descricao=data['descricao'] if 'data' in data else aula.data
-        )
+        Aula.objects.filter(pk=self.kwargs['aula']).update(nome=data['nome'] if 'nome' in data else aula.nome)
         return response.Response(data, status=status.HTTP_200_OK)
 
     def delete(self, request, **kwargs):
@@ -33,19 +30,30 @@ class AulaView(views.APIView):
 
 
 class AulaAlunoView(views.APIView):
+    def post(self, request, **kwargs):
+        data = request.data
+        aula = Aula.objects.get(pk=data['aula'])
+        aluno = Aluno.objects.get(pk=data['aluno'])
+        verify = AulaAluno.objects.filter(aluno=aluno, aula=aula)
+        if (len(verify) == 0):
+            aula_aluno = AulaAluno(aula=aula, aluno=aluno)
+            aula_aluno.save()
+            return response.Response({}, status=status.HTTP_201_CREATED)
+        else:
+            return response.Response({}, status=status.HTTP_400_BAD_REQUEST)
+
     def get(self, request, **kwargs):
         aluno = self.kwargs['aluno']
         aulas: list = [serializer.aula(aula_aluno.aula) for aula_aluno in AulaAluno.objects.filter(aluno=aluno)]
 
         return response.Response(aulas, status=status.HTTP_200_OK)
     
-    def put(self, request, **kwargs):
+
+    def delete(self, request, **kwargs):
         data = request.data
-        aula_aluno = AulaAluno.objects.filter(aula=data['aula'], aluno=data['aluno'])[0]
-        AulaAluno.objects.filter(aula=data['aula'], aluno=data['aluno']).update(
-            presente=data['presente'] if 'presente' in data else aula_aluno.presente,
-        )
-        return response.Response(data, status=status.HTTP_200_OK)
+        AulaAluno.objects.filter(aula=data['aula'], aluno=data['aluno']).delete()
+        return response.Response({}, status=status.HTTP_200_OK)
+
 
 class AlunosDaAula(views.APIView):
     def get(self, request, **kwargs):
@@ -88,14 +96,35 @@ class TarefaView(views.APIView):
         return response.Response({}, status=status.HTTP_200_OK)
 
 
-class ChamadaView(views.APIView):
+class DataChamadaView(views.APIView):
     def post(self, request, **kwargs):
         data = request.data
         aula = Aula.objects.get(pk=self.kwargs['aula'])
-        alunos = json.loads(data['alunos'])
-        for aluno_id in alunos:
-            aluno = Aluno.objects.get(pk=aluno_id)
-            chamada = Chamada(aula=aula, aluno=aluno)
+        data_chamada = DataChamada(data=data['data'], aula=aula)
+        data_chamada.save()
+
+        return response.Response(serializer.data_chamada(data_chamada), status=status.HTTP_201_CREATED)
+    
+    def get(self, request, **kwargs):
+        aula = Aula.objects.get(pk=self.kwargs['aula'])
+        data_chamadas = [serializer.data_chamada(data_chamada) 
+        for data_chamada in DataChamada.objects.filter(aula=aula)]
+
+        return response.Response(data_chamadas, status=status.HTTP_200_OK)
+
+
+class ChamadaView(views.APIView):
+    def post(self, request, **kwargs):
+        data = request.data
+        data_chamada = DataChamada.objects.get(pk=self.kwargs['data_chamada'])
+        # alunos = json.loads(data['alunos'])
+        for al in data['alunos']:
+            aluno = Aluno.objects.get(pk=al['id'])
+            chamada = Chamada(
+                aluno=aluno,
+                data_chamada=data_chamada,
+                presente=True if al['presente'] == '1' else False
+                )
             chamada.save()
 
         return response.Response({}, status=status.HTTP_201_CREATED)

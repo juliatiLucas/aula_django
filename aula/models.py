@@ -3,7 +3,6 @@ from usuario.models import Professor, Aluno
 
 class Aula(models.Model):
     nome = models.CharField(max_length=200, blank=False, null=False)
-    data = models.DateTimeField(blank=False, null=False)
     professor = models.ForeignKey(Professor, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -37,13 +36,25 @@ class Tarefa(models.Model):
     def __unicode__(self):
         return self.nome
 
-class Chamada(models.Model):
-    aula = models.ForeignKey(Aula, on_delete=models.CASCADE)
+class DataChamada(models.Model):
     data = models.DateField(auto_now_add=True)
+    aula = models.ForeignKey(Aula, on_delete=models.CASCADE, default="1")
+
+    def __str__(self):
+        return str(self.data)
+
+    def __unicode__(self):
+        return str(self.data)
+
+
+class Chamada(models.Model):
+    data_chamada = models.ForeignKey(DataChamada, on_delete=models.CASCADE)
     aluno = models.ForeignKey(Aluno, on_delete=models.CASCADE)
+    presente = models.BooleanField(default=False)
 
     def __str__(self):
         return self.aula.nome
 
     def __unicode__(self):
         return self.aula.nome
+

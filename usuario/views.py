@@ -79,5 +79,8 @@ class LoginView(views.APIView):
 
 class BuscarAluno(views.APIView):
     def get(self, request, **kwargs):
-        alunos = [serializer.aluno(aluno) for aluno in Aluno.objects.filter(Q(nome__istartswith=self.kwargs['busca']) | Q(email__istartswith=self.kwargs['busca']))]
+        alunos = [
+            serializer.aluno(aluno) 
+            for aluno in Aluno.objects.filter(Q(nome__istartswith=self.kwargs['busca']) | Q(email__istartswith=self.kwargs['busca']))
+        ]
         return response.Response(alunos, status.HTTP_200_OK)
