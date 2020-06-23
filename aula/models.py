@@ -37,7 +37,7 @@ class Tarefa(models.Model):
         return self.nome
 
 class DataChamada(models.Model):
-    data = models.DateField(auto_now_add=True)
+    data = models.DateField(auto_now_add=False)
     aula = models.ForeignKey(Aula, on_delete=models.CASCADE, default="1")
 
     def __str__(self):
