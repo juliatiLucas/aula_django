@@ -8,7 +8,7 @@ class AulaView(views.APIView):
     def post(self, request, **kwargs):
         data = request.data
         professor = Professor.objects.get(pk=data['professor'])
-        aula = Aula(nome=data['nome'], professor=professor, data=data['data'])
+        aula = Aula(nome=data['nome'], professor=professor)
         aula.save()
         return response.Response(serializer.aula(aula), status=status.HTTP_201_CREATED)
     

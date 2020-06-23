@@ -25,7 +25,6 @@ def aula(aula):
     return {
         "id": aula.id,
         "nome": aula.nome,
-        "data": aula.data,
         "professor": professor(aula.professor)
     }
 
