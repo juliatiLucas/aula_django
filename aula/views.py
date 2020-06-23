@@ -118,9 +118,9 @@ class ChamadaView(views.APIView):
         data = request.data
         data_chamada = DataChamada.objects.get(pk=self.kwargs['data_chamada'])
         # alunos = json.loads(data['alunos'])
-        print(data + ' - data')
+        print(data)
+        print(data['alunos'])
         print(data['alunos'][1:-1])
-        print(data['alunos'][1:-1]+' - formatada')
         for al in data['alunos'][1:-1]:
             print(al)
             aluno = Aluno.objects.get(pk=al['id'])
