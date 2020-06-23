@@ -18,10 +18,10 @@ class AulaAluno(models.Model):
     presente = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.aula.nome
+        return f'{self.aluno.nome} [{self.aula.nome}]'
 
     def __unicode__(self):
-        return self.aula.nome
+        return f'{self.aluno.nome} [{self.aula.nome}]'
 
 
 class Tarefa(models.Model):
@@ -41,10 +41,10 @@ class DataChamada(models.Model):
     aula = models.ForeignKey(Aula, on_delete=models.CASCADE, default="1")
 
     def __str__(self):
-        return str(self.data)
+        return f'{self.pk} {self.aula.nome} [{str(self.data)}]'
 
     def __unicode__(self):
-        return str(self.data)
+        return f'{self.pk} {self.aula.nome} [{str(self.data)}]'
 
 
 class Chamada(models.Model):
@@ -53,8 +53,8 @@ class Chamada(models.Model):
     presente = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.aula.nome
+        return f'{self.aluno.nome} [{str(self.data_chamada.data)}]'
 
     def __unicode__(self):
-        return self.aula.nome
+        return f'{self.aluno.nome} [{str(self.data_chamada.data)}]'
 
