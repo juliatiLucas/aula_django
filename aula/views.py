@@ -51,7 +51,7 @@ class AulaAlunoView(views.APIView):
 
     def delete(self, request, **kwargs):
         data = request.data
-        AulaAluno.objects.filter(aula=data['aula'], aluno=data['aluno']).delete()
+        AulaAluno.objects.filter(aula=self.kwargs['aula'], aluno=self.kwargs['aluno']).delete()
         return response.Response({}, status=status.HTTP_200_OK)
 
 

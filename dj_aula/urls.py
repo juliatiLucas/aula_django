@@ -13,6 +13,7 @@ urlpatterns = [
     path('alunos/', AlunoView.as_view()),
     path('alunos/<int:aluno>', AlunoView.as_view()),
     path('alunos/<int:aluno>/aulas/', AulaAlunoView.as_view()),
+    path('alunos/<int:aluno>/aulas/<int:aula>/', AulaAlunoView.as_view()),
     path('login/', LoginView.as_view()),
     path('aulas/', AulaView.as_view()),
     path('aulas/<int:aula>/', AulaView.as_view()),
