@@ -49,6 +49,7 @@ def mensagem(mensagem):
         "id": mensagem.id,
         "texto": mensagem.texto,
         "imagem": mensagem.imagem,
+        "data": mensagem.data,
         "aula": aula(mensagem.aula),
         "professor": professor(mensagem.professor) if mensagem.professor else None,
         "aluno": aluno(mensagem.aluno) if mensagem.aluno else None
